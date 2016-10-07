@@ -39,10 +39,10 @@ $(document).ready(function () {
   }
 
   SidebarToggleLine.prototype.init = function () {
-    this.transform('init');
+     this.transform('init');
   };
   SidebarToggleLine.prototype.arrow = function () {
-    this.transform('arrow');
+     this.transform('arrow');
   };
   SidebarToggleLine.prototype.close = function () {
     this.transform('close');
@@ -77,7 +77,7 @@ $(document).ready(function () {
   sidebarToggleLines.push(sidebarToggleLine2nd);
   sidebarToggleLines.push(sidebarToggleLine3rd);
 
-  var SIDEBAR_WIDTH = '320px';
+  var SIDEBAR_WIDTH = '250px';
   var SIDEBAR_DISPLAY_DURATION = 200;
 
   var sidebarToggleMotion = {
