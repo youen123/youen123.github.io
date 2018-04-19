@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="源码学习," />
 
 
 
@@ -84,15 +84,31 @@
 
 
 
-<meta name="description" content="发一些牢骚，记一些笔记">
-<meta property="og:type" content="website">
-<meta property="og:title" content="youen的藏宝箱">
-<meta property="og:url" content="http://youen123.github.io/index.html">
+<meta name="description" content="上一篇主要看了core.js，提到了无 new的构造方式，这一篇就看看这个init里究竟干了什么吧
+用法
+jQuery()Return a collection of matched elements either found in the DOM based on passed argument(s) or created by passing an HTML string.
+
+
+jQuery(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery学习之init">
+<meta property="og:url" content="http://youen123.github.io/2018/04/19/jQuery学习之init/index.html">
 <meta property="og:site_name" content="youen的藏宝箱">
-<meta property="og:description" content="发一些牢骚，记一些笔记">
+<meta property="og:description" content="上一篇主要看了core.js，提到了无 new的构造方式，这一篇就看看这个init里究竟干了什么吧
+用法
+jQuery()Return a collection of matched elements either found in the DOM based on passed argument(s) or created by passing an HTML string.
+
+
+jQuery(">
+<meta property="og:updated_time" content="2018-04-19T08:14:45.018Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="youen的藏宝箱">
-<meta name="twitter:description" content="发一些牢骚，记一些笔记">
+<meta name="twitter:title" content="jQuery学习之init">
+<meta name="twitter:description" content="上一篇主要看了core.js，提到了无 new的构造方式，这一篇就看看这个init里究竟干了什么吧
+用法
+jQuery()Return a collection of matched elements either found in the DOM based on passed argument(s) or created by passing an HTML string.
+
+
+jQuery(">
 
 
 
@@ -113,9 +129,9 @@
 
 
 
-  <link rel="canonical" href="http://youen123.github.io/"/>
+  <link rel="canonical" href="http://youen123.github.io/2018/04/19/jQuery学习之init/"/>
 
-  <title> youen的藏宝箱 </title>
+  <title> jQuery学习之init | youen的藏宝箱 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -136,9 +152,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -235,9 +249,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -257,10 +271,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2018/04/19/jQuery学习之init/" itemprop="url">
-                  jQuery学习之init
-                </a>
+                jQuery学习之init
               
             
           </h1>
@@ -319,9 +330,7 @@
       
 
       
-        
-          
-            <p>上一篇主要看了core.js，提到了无 new的构造方式，这一篇就看看这个init里究竟干了什么吧</p>
+        <p>上一篇主要看了core.js，提到了无 new的构造方式，这一篇就看看这个init里究竟干了什么吧</p>
 <h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><blockquote>
 <p>jQuery()<br>Return a collection of matched elements either found in the DOM based on passed argument(s) or created by passing an HTML string.</p>
 </blockquote>
@@ -376,846 +385,59 @@
 <p>下面还有一段处理脚本的代码，还没看懂。。。<br>然后把所有的节点都在到碎片里，并对脚本进行处理，这一段没看懂。。。😅<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">fragment.textContent = <span class="string">""</span>;</div><div class="line"></div><div class="line">i = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> ( ( <span class="built_in">elem</span> = nodes[ i++ ] ) ) &#123;</div><div class="line"></div><div class="line">    // Skip elements already <span class="keyword">in</span> the <span class="built_in">context</span> collection (trac-<span class="number">4087</span>)</div><div class="line">    <span class="keyword">if</span> ( selection &amp;&amp; jQuery.inArray( <span class="built_in">elem</span>, selection ) &gt; -<span class="number">1</span> ) &#123;</div><div class="line">        <span class="keyword">if</span> ( ignored ) &#123;</div><div class="line">            ignored.<span class="built_in">push</span>( <span class="built_in">elem</span> );</div><div class="line">        &#125;</div><div class="line">        continue;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    attached = isAttached( <span class="built_in">elem</span> );</div><div class="line"></div><div class="line">    // Append to fragment</div><div class="line">    tmp = getAll( fragment.appendChild( <span class="built_in">elem</span> ), <span class="string">"script"</span> );</div><div class="line"></div><div class="line">    // Preserve script evaluation history</div><div class="line">    <span class="keyword">if</span> ( attached ) &#123;</div><div class="line">        setGlobalEval( tmp );</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // Capture executables</div><div class="line">    <span class="keyword">if</span> ( scripts ) &#123;</div><div class="line">        j = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span> ( ( <span class="built_in">elem</span> = tmp[ j++ ] ) ) &#123;</div><div class="line">            <span class="keyword">if</span> ( rscriptType.test( <span class="built_in">elem</span>.type || <span class="string">""</span> ) ) &#123;</div><div class="line">                scripts.<span class="built_in">push</span>( <span class="built_in">elem</span> );</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>到这似乎越来越接近sizzle了，但是看到这我都觉得有点费力了，之后可能不按顺序走了，挑点简单的看起。</p>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/04/17/jQuery学习一/" itemprop="url">
-                  jQuery学习一
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2018-04-17T17:26:47+08:00" content="2018-04-17">
-              2018-04-17
-            </time>
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/JS/" itemprop="url" rel="index">
-                    <span itemprop="name">JS</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
+            <a href="/tags/源码学习/" rel="tag">#源码学习</a>
           
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>虽然被人嘲笑过在简历里写自己用过jQuery，但我觉得jQuery并不是一个很low的东西，它作为一个库有很多值得学习的地方。在面试的时候，还被问到相关的问题，如选择器实现，链式调用，事件委托，deffered对象实现等，答得不是很好。我决定抽点时间看看这块内容，顺便给久未更新的博客新增一些内容。</p>
-<p>但这块内容很多，我得慢慢写。不过也不急。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/04/17/jQuery学习一/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/17/jQuery学习一/" rel="next" title="jQuery学习一">
+                <i class="fa fa-chevron-left"></i> jQuery学习一
+              </a>
+            
           </div>
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
+          <div class="post-nav-prev post-nav-item">
             
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/08/再见/" itemprop="url">
-                  再见
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-04-08T18:19:27+08:00" content="2017-04-08">
-              2017-04-08
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">随笔</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
+          </div>
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=21948077&auto=0&height=66"></iframe>
-
-<p>看着同学在纸上写着年龄22的时候，我的脑袋白了一下。不对，走过这一年，我可以说走了两轮了吧，一直把自己当孩子，但却挡不出时间的洪流。照镜子的时候，发现脸上其实已经开始长细纹了。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2017/04/08/再见/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/20/2016总结/" itemprop="url">
-                  2016年个人总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-01-20T22:59:31+08:00" content="2017-01-20">
-              2017-01-20
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">随笔</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>这个总结似乎来的迟了一些，但是为自己辩解一下，迟到总好过缺席。  </p>
-<p>这一年好像没什么事是特别在意料之外的，再加2015对2016没有什么具体的规划，所以对生活学习还是其他我都抱着顺其自然的态度。</p>
-<p>先简要回顾一下我的2016吧。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2017/01/20/2016总结/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/10/07/孤独症患者的自白/" itemprop="url">
-                  孤独症患者的自白
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-07T21:28:51+08:00" content="2016-10-07">
-              2016-10-07
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">随笔</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>&emsp;&emsp;之前整理的部分日记的片段，想拿出来放在这里，让自己随时能想起那段时光，那个自己。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/10/07/孤独症患者的自白/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/27/翻烙饼问题/" itemprop="url">
-                  翻烙饼问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-27T15:36:34+08:00" content="2016-09-27">
-              2016-09-27
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>一堆大小不一的烙饼，每次只能翻转最上面的几个饼，通过几次翻转使小的烙饼在上面大的烙饼在下面，寻找翻转次数最少的方法<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/09/27/翻烙饼问题/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/19/cafe/" itemprop="url">
-                  咖啡
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-19T23:00:03+08:00" content="2016-09-19">
-              2016-09-19
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">随笔</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>&emsp;&emsp;前面的女孩倒腾着咖啡机，各种按钮胡乱按着，就是不见咖啡出来，终于放弃，走了。我没有走，对于修东西这种事，我一向很有兴趣。但是似乎多是把事情搞得更糟而不是更好。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/09/19/cafe/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/19/sort/" itemprop="url">
-                  常见的排序算法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-19T19:18:22+08:00" content="2016-07-19">
-              2016-07-19
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p> 排序在面试中经常会遇到，但是不用就忘了，这里小记一番。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/07/19/sort/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
@@ -1223,6 +445,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -1242,8 +468,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/head.png"
@@ -1293,6 +528,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#用法"><span class="nav-number">1.</span> <span class="nav-text">用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对DOM的操作"><span class="nav-number">2.1.</span> <span class="nav-text">对DOM的操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对callback的操作"><span class="nav-number">2.2.</span> <span class="nav-text">对callback的操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对HTML-string的处理"><span class="nav-number">2.3.</span> <span class="nav-text">对HTML string的处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parseHTML"><span class="nav-number">3.</span> <span class="nav-text">parseHTML</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -1389,6 +635,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
