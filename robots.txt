@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /archives/
+Allow: /categories/
+Allow: /tags/
+Disallow: /js/
+Disallow: /css/
+Disallow: /images/
+Disallow: /lib/
+Disallow: /about/
+
+Sitemap: http://youlujie.top/sitemap.xml
+Sitemap: http://youlujie.top/baidusitemap.xml
