@@ -111,19 +111,16 @@
 
 
 
-  <meta name="description" content="Promise 对象用于表示一个异步操作的最终状态（完成或失败），以及其返回的值。是异步编程的一种解决方案。
-它有三种状态，pending | fulfilled | rejected，状态变更后不可逆，有个then方法，为 Promise 实例添加状态改变时的回调函数">
+  <meta name="description" content="自己实现一个promise，符合A+规范，具有resovle, reject, then, throw, all, race 等方法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="自己实现一个promise">
 <meta property="og:url" content="http://youlujie.top/自己实现一个promise.html">
 <meta property="og:site_name" content="youen的藏宝箱">
-<meta property="og:description" content="Promise 对象用于表示一个异步操作的最终状态（完成或失败），以及其返回的值。是异步编程的一种解决方案。
-它有三种状态，pending | fulfilled | rejected，状态变更后不可逆，有个then方法，为 Promise 实例添加状态改变时的回调函数">
-<meta property="og:updated_time" content="2018-05-24T07:41:31.689Z">
+<meta property="og:description" content="自己实现一个promise，符合A+规范，具有resovle, reject, then, throw, all, race 等方法">
+<meta property="og:updated_time" content="2018-05-28T09:45:57.167Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自己实现一个promise">
-<meta name="twitter:description" content="Promise 对象用于表示一个异步操作的最终状态（完成或失败），以及其返回的值。是异步编程的一种解决方案。
-它有三种状态，pending | fulfilled | rejected，状态变更后不可逆，有个then方法，为 Promise 实例添加状态改变时的回调函数">
+<meta name="twitter:description" content="自己实现一个promise，符合A+规范，具有resovle, reject, then, throw, all, race 等方法">
 
 
 
@@ -140,7 +137,7 @@
   };
 </script>
 
-  <title>自己实现一个promise | youen的藏宝箱</title>
+  <title>自己实现一个promise</title>
   
 
 
@@ -382,7 +379,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-24 15:41:31" itemprop="dateModified" datetime="2018-05-24T15:41:31+08:00">2018-05-24</time>
+                <time title="修改时间：2018-05-28 17:45:57" itemprop="dateModified" datetime="2018-05-28T17:45:57+08:00">2018-05-28</time>
               
             
           </span>
@@ -438,9 +435,6 @@
           
 
           
-
-          
-
         </div>
       </header>
     
@@ -450,6 +444,9 @@
     
     <div class="post-body" itemprop="articleBody">
 
+    
+        <div class="post-description">自己实现一个promise，符合A+规范，具有resovle, reject, then, throw, all, race 等方法</div>
+    
       
       
 
@@ -517,7 +514,7 @@
 <li>如果 x 不是对象也不是函数，则以x为值 fulfill promise。</li>
 </ol>
 </blockquote>
-<p>按照上述的要求，我们一步步处理一下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> resolveHandler = (promise, x, resolve, reject) =&gt; &#123;</div><div class="line">  <span class="comment">// 第一条</span></div><div class="line">  <span class="keyword">if</span> (x === promise) &#123;</div><div class="line">    <span class="keyword">return</span> reject(<span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'不能是自身'</span>))</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// 第二条</span></div><div class="line">  <span class="keyword">if</span> (x <span class="keyword">instanceof</span> <span class="built_in">Promise</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (x.status === <span class="string">'fulfilled'</span>) &#123;</div><div class="line">      <span class="keyword">return</span> resolve(x.value)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (x.status === <span class="string">'rejected'</span>) &#123;</div><div class="line">      <span class="keyword">return</span> reject(x.reason)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (x.status === <span class="string">'pending'</span>) &#123;</div><div class="line">      <span class="keyword">return</span> x.then(resolve, reject)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// 第三条</span></div><div class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> x === <span class="string">'object'</span> || <span class="keyword">typeof</span> x === <span class="string">'function'</span>) &#123;</div><div class="line">    <span class="keyword">let</span> then</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        then = x.then</div><div class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">        <span class="keyword">return</span> reject(e)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> then === <span class="string">'function'</span>) &#123;</div><div class="line">      <span class="keyword">let</span> called = <span class="literal">false</span></div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">        then.call(x, y =&gt; &#123;</div><div class="line">          <span class="comment">// 只能调用一次</span></div><div class="line">          <span class="keyword">if</span> (!called) &#123;</div><div class="line">            called = <span class="literal">true</span></div><div class="line">            resolveHandler(promise2, y, resolve, reject)</div><div class="line">          &#125;</div><div class="line">        &#125;, r =&gt; &#123;</div><div class="line">          <span class="keyword">if</span> (!called) &#123;</div><div class="line">            called = <span class="literal">true</span></div><div class="line">            reject(r)</div><div class="line">          &#125;</div><div class="line">        &#125;)</div><div class="line">      &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">        <span class="keyword">if</span> (!called) &#123;</div><div class="line">          reject(e)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">return</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  resolve(x)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>按照上述的要求，我们一步步处理一下<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">let resolveHandler = <span class="function"><span class="params">(promise, x, resolve, reject)</span> =&gt;</span> &#123;</div><div class="line">  <span class="regexp">//</span> 第一条</div><div class="line">  <span class="keyword">if</span> (x === promise) &#123;</div><div class="line">    <span class="keyword">return</span> reject(<span class="keyword">new</span> TypeError(<span class="string">'不能是自身'</span>))</div><div class="line">  &#125;</div><div class="line">  <span class="regexp">//</span> 第二条</div><div class="line">  <span class="keyword">if</span> (x <span class="keyword">instanceof</span> Promise) &#123;</div><div class="line">    <span class="keyword">if</span> (x.status === <span class="string">'fulfilled'</span>) &#123;</div><div class="line">      <span class="keyword">return</span> resolve(x.value)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (x.status === <span class="string">'rejected'</span>) &#123;</div><div class="line">      <span class="keyword">return</span> reject(x.reason)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (x.status === <span class="string">'pending'</span>) &#123;</div><div class="line">      <span class="keyword">return</span> x.<span class="keyword">then</span>(resolve, reject)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="regexp">//</span> 第三条</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> x === <span class="string">'object'</span> || <span class="keyword">typeof</span> x === <span class="string">'function'</span>) &#123;</div><div class="line">    let <span class="keyword">then</span></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">then</span> = x.<span class="keyword">then</span></div><div class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">        <span class="keyword">return</span> reject(e)</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">then</span> === <span class="string">'function'</span>) &#123;</div><div class="line">      let called = <span class="literal">false</span></div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">then</span>.call(x, y =&gt; &#123;</div><div class="line">          <span class="regexp">//</span> 只能调用一次</div><div class="line">          <span class="keyword">if</span> (!called) &#123;</div><div class="line">            called = <span class="literal">true</span></div><div class="line">            resolveHandler(promise2, y, resolve, reject)</div><div class="line">          &#125;</div><div class="line">        &#125;, r =&gt; &#123;</div><div class="line">          <span class="keyword">if</span> (!called) &#123;</div><div class="line">            called = <span class="literal">true</span></div><div class="line">            reject(r)</div><div class="line">          &#125;</div><div class="line">        &#125;)</div><div class="line">      &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">        <span class="keyword">if</span> (!called) &#123;</div><div class="line">          reject(e)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">return</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  resolve(x)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h5 id="then的链式实现"><a href="#then的链式实现" class="headerlink" title="then的链式实现"></a>then的链式实现</h5><blockquote>
 <ul>
 <li>如果onFulfilled 或 onRejected 返回了值<code>x</code>, 则执行Promise 解析流程<code>[[Resolve]](promise2, x)</code>.</li>
