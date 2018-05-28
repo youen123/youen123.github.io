@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta name="google-site-verification" content="OziN3m4EViQsY_rvbdqzUKYznAoGaD0XQ-LKsHawyHs" />
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="true" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="上一篇主要看了core.js，提到了无 new的构造方式，这一篇就看看这个init里究竟干了什么吧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery学习之init">
+<meta property="og:url" content="http://youlujie.top/jQuery学习之init.html">
+<meta property="og:site_name" content="youen的藏宝箱">
+<meta property="og:description" content="上一篇主要看了core.js，提到了无 new的构造方式，这一篇就看看这个init里究竟干了什么吧">
+<meta property="og:updated_time" content="2018-04-19T08:17:08.056Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery学习之init">
+<meta name="twitter:description" content="上一篇主要看了core.js，提到了无 new的构造方式，这一篇就看看这个init里究竟干了什么吧">
+
+
+
+
+
+
+  <link rel="canonical" href="http://youlujie.top/jQuery学习之init.html"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>jQuery学习之init | youen的藏宝箱</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?5591142162fa1541c5fbc6ba025f378e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">youen的藏宝箱</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">前端笔记</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://youlujie.top/jQuery学习之init.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="youen">
+      <meta itemprop="description" content="记一些笔记，发一些牢骚">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="youen的藏宝箱">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">jQuery学习之init
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-04-19 16:12:32 / 修改时间：16:17:08" itemprop="dateCreated datePublished" datetime="2018-04-19T16:12:32+08:00">2018-04-19</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JS/" itemprop="url" rel="index"><span itemprop="name">JS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/jQuery学习之init.html#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/jQuery学习之init.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/jQuery学习之init.html" class="leancloud_visitors" data-flag-title="jQuery学习之init">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上一篇主要看了core.js，提到了无 new的构造方式，这一篇就看看这个init里究竟干了什么吧</p>
+<a id="more"></a>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><blockquote>
+<p>jQuery()<br>Return a collection of matched elements either found in the DOM based on passed argument(s) or created by passing an HTML string.</p>
+</blockquote>
+<ul>
+<li>jQuery( selector [, context ] )<ul>
+<li>jQuery( selector [, context ] )</li>
+<li>jQuery( element )</li>
+<li>jQuery( elementArray )</li>
+<li>jQuery( object )</li>
+<li>jQuery( selection )</li>
+<li>jQuery()</li>
+</ul>
+</li>
+<li>jQuery( html [, ownerDocument ] )<ul>
+<li>jQuery( html [, ownerDocument ] )</li>
+<li>jQuery( html, attributes )</li>
+</ul>
+</li>
+<li>jQuery( callback )</li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>jQuery的代码里，则是分成string, dom, callback来分别处理的<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">init = jQuery.fn.init = <span class="function"><span class="keyword">function</span>(<span class="params"> selector, context, root </span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> match, elem;</div><div class="line"></div><div class="line">        <span class="comment">// HANDLE: $(""), $(null), $(undefined), $(false)</span></div><div class="line">        <span class="keyword">if</span> ( !selector ) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// Method init() accepts an alternate rootjQuery</span></div><div class="line">        <span class="comment">// so migrate can support jQuery.sub (gh-2101)</span></div><div class="line">        root = root || rootjQuery;</div><div class="line"></div><div class="line">        <span class="comment">// Handle HTML strings</span></div><div class="line">        <span class="keyword">if</span> ( <span class="keyword">typeof</span> selector === <span class="string">"string"</span> ) &#123;</div><div class="line">            <span class="comment">// ...</span></div><div class="line">        <span class="comment">// HANDLE: $(DOMElement)</span></div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( selector.nodeType ) &#123;</div><div class="line">            <span class="comment">// ...</span></div><div class="line"></div><div class="line">        <span class="comment">// HANDLE: $(function)</span></div><div class="line">        <span class="comment">// Shortcut for document ready</span></div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( isFunction( selector ) ) &#123;</div><div class="line">            <span class="comment">// ...</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> jQuery.makeArray( selector, <span class="keyword">this</span> );</div><div class="line">    &#125;;</div><div class="line">rootjQuery = jQuery( <span class="built_in">document</span> );</div></pre></td></tr></table></figure></p>
+<h4 id="对DOM的操作"><a href="#对DOM的操作" class="headerlink" title="对DOM的操作"></a>对DOM的操作</h4><p>对dom的操作，直接将dom在实例的<code>0</code>属性上，设置length，返回即可<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ( selector.nodeType ) &#123;</div><div class="line">    <span class="keyword">this</span>[ <span class="number">0</span> ] = selector;</div><div class="line">    <span class="keyword">this</span>.length = <span class="number">1</span>;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="对callback的操作"><a href="#对callback的操作" class="headerlink" title="对callback的操作"></a>对callback的操作</h4><p>为ready的简写<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ( isFunction( selector ) ) &#123;</div><div class="line">    <span class="keyword">return</span> root.ready !== undefined ?</div><div class="line">        root.ready( selector ) :</div><div class="line"></div><div class="line">        // <span class="type">Execute</span> immediately <span class="keyword">if</span> ready <span class="keyword">is</span> <span class="keyword">not</span> present</div><div class="line">        selector( jQuery );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="对HTML-string的处理"><a href="#对HTML-string的处理" class="headerlink" title="对HTML string的处理"></a>对HTML string的处理</h4><p>用正则表达式去提取字符串的信息<br><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rquickExpr = /^(?:<span class="symbol">\s</span>*(&lt;[<span class="symbol">\w</span><span class="symbol">\W</span>]+&gt;)[^&gt;]*|#([<span class="symbol">\w</span>-]+))$/</div></pre></td></tr></table></figure></p>
+<p><code>(?:pattern)</code>: 表示匹配但是不存储<br><code>\s*</code>：前面的空格<br><code>(&lt;[\w\W]+&gt;)</code>: 匹配标签到结束<code>&lt;div&gt;&lt;/div&gt;</code><br><code>[^&gt;]</code>: 匹配所有不是<code>&gt;</code>的字符<br><code>#([\w-]*))$</code>: id 表达式</p>
+<p>正则表达式exec: </p>
+<blockquote>
+<p>如果 exec() 找到了匹配的文本，则返回一个结果数组。否则，返回 null。此数组的第 0 个元素是与正则表达式相匹配的文本，第 i 个元素是与 RegExpObject 的第 i 个子表达式相匹配的文本（如果有的话）</p>
+</blockquote>
+<p>用match来记录匹配的结果<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">if</span> ( <span class="keyword">selector[ </span><span class="number">0</span> ] === <span class="string">"&lt;"</span> &amp;&amp; <span class="keyword">selector[ </span><span class="keyword">selector.length </span>- <span class="number">1</span> ] === <span class="string">"&gt;"</span> &amp;&amp; <span class="keyword">selector.length </span>&gt;= <span class="number">3</span> ) &#123;</div><div class="line"></div><div class="line">    // Assume that <span class="keyword">strings </span>that start <span class="keyword">and </span><span class="meta">end</span> with &lt;&gt; are HTML <span class="keyword">and </span>skip the regex check</div><div class="line">    match = [ null, <span class="keyword">selector, </span>null ]<span class="comment">;</span></div><div class="line"></div><div class="line">&#125; <span class="meta">else</span> &#123;</div><div class="line">    match = rquickExpr.exec( <span class="keyword">selector </span>)<span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后来分析match的结果，我们知道match[1] 对应的是<code>(&lt;[\w\W]+&gt;)</code>(标签)这部分，match[2]对应的是<code>([\w-]*)</code>（id）部分</p>
+<ol>
+<li>有match[1]，那给的是html串，需要对html串，进行解析成一组dom ，与实例合并。如果第二个参数是属性数组，则给实例添加相应的属性或方法。</li>
+</ol>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">// HANDLE: $(html) -&gt; $(<span class="built_in">array</span>)</div><div class="line"><span class="keyword">if</span> ( match[ <span class="number">1</span> ] ) &#123;</div><div class="line">    <span class="built_in">context</span> = <span class="built_in">context</span> instanceof jQuery ? <span class="built_in">context</span>[ <span class="number">0</span> ] : <span class="built_in">context</span>;</div><div class="line"></div><div class="line">    // Option to run scripts <span class="built_in">is</span> <span class="literal">true</span> <span class="keyword">for</span> back-compat</div><div class="line">    // Intentionally <span class="built_in">let</span> the <span class="built_in">error</span> be thrown <span class="keyword">if</span> parseHTML <span class="built_in">is</span> <span class="keyword">not</span> present</div><div class="line">    jQuery.merge( this, jQuery.parseHTML(</div><div class="line">        match[ <span class="number">1</span> ],</div><div class="line">        <span class="built_in">context</span> &amp;&amp; <span class="built_in">context</span>.nodeType ? <span class="built_in">context</span>.ownerDocument || <span class="built_in">context</span> : document,</div><div class="line">        <span class="literal">true</span></div><div class="line">    ) );</div><div class="line"></div><div class="line">    // HANDLE: $(html, <span class="built_in">props</span>)</div><div class="line">    <span class="keyword">if</span> ( rsingleTag.test( match[ <span class="number">1</span> ] ) &amp;&amp; jQuery.isPlainObject( <span class="built_in">context</span> ) ) &#123;</div><div class="line">        <span class="keyword">for</span> ( match <span class="keyword">in</span> <span class="built_in">context</span> ) &#123;</div><div class="line"></div><div class="line">            // Properties of <span class="built_in">context</span> are called as methods <span class="keyword">if</span> possible</div><div class="line">            <span class="keyword">if</span> ( isFunction( this[ match ] ) ) &#123;</div><div class="line">                this[ match ]( <span class="built_in">context</span>[ match ] );</div><div class="line"></div><div class="line">            // ...<span class="keyword">and</span> otherwise set as attributes</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                this.attr( match, <span class="built_in">context</span>[ match ] );</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="built_in">return</span> this;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>没有match[1], 有match[2] 说明是id选择器，直接通过<code>document.getElementById</code>找到元素，然后像对待<code>$(DOMElement)</code>一样处理即可</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">elem = document.getElementById( match[ <span class="number">2</span> ] );</div><div class="line"></div><div class="line"><span class="keyword">if</span> ( elem ) &#123;</div><div class="line"></div><div class="line">    <span class="comment">// Inject the element directly into the jQuery object</span></div><div class="line">    <span class="keyword">this</span>[ <span class="number">0</span> ] = elem;</div><div class="line">    <span class="keyword">this</span>.length = <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">return</span> <span class="keyword">this</span>;</div></pre></td></tr></table></figure>
+<ol>
+<li>没有match[1]，没有match[2]，那就是其他的选择器，在上下文对象上走<code>find</code>路线</li>
+</ol>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ( !context || context.jquery ) &#123;</div><div class="line">    <span class="keyword">return</span> ( context || root ).find( selector );</div><div class="line"></div><div class="line"><span class="comment">// HANDLE: $(expr, context)</span></div><div class="line"><span class="comment">// (which is just equivalent to: $(context).find(expr)</span></div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.<span class="keyword">constructor</span>( context ).find( selector );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="parseHTML"><a href="#parseHTML" class="headerlink" title="parseHTML"></a>parseHTML</h3><p>作用是将字符串转成一组dom节点</p>
+<p>用到了一个复杂的正则表达式去匹配单个标签元素的情况<br><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/^&lt;([a-z][^<span class="symbol">\/</span><span class="symbol">\0</span>&gt;:<span class="symbol">\x</span>20<span class="symbol">\t</span><span class="symbol">\r</span><span class="symbol">\n</span><span class="symbol">\f</span>]*)[<span class="symbol">\x</span>20<span class="symbol">\t</span><span class="symbol">\r</span><span class="symbol">\n</span><span class="symbol">\f</span>]*<span class="symbol">\/</span>?&gt;(?:&lt;<span class="symbol">\/</span><span class="symbol">\1</span>&gt;|)$/i;</div><div class="line">&#125; );</div></pre></td></tr></table></figure></p>
+<p><code>([a-z][^\/\0&gt;:\x20\t\r\n\f]*)</code>: 匹配标签的名称，名称含有字母，不含空格，’&gt;’, ‘:’， ‘/‘等<br><code>[\x20\t\r\n\f]*</code>: 匹配空格、制表符、回车、换行、分页<br><code>\/?&gt;</code> 可以带/，考虑到<code>&lt;input/&gt;</code>这样的元素<br><code>(?:&lt;\/\1&gt;|)</code>: \1表示捕获的第一个分组，这部分匹配如<code>&lt;/div&gt;</code> 或者为空</p>
+<p>用正则去匹配字符串，match[1]就是标签名</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">jQuery<span class="variable">.parseHTML</span> = <span class="keyword">function</span>( data, <span class="keyword">context</span>, keepScripts ) &#123;</div><div class="line">    <span class="keyword">if</span> ( typeof data !== <span class="string">"string"</span> ) &#123;</div><div class="line">        <span class="keyword">return</span> [];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> ( typeof <span class="keyword">context</span> === <span class="string">"boolean"</span> ) &#123;</div><div class="line">        keepScripts = <span class="keyword">context</span>;</div><div class="line">        <span class="keyword">context</span> = false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> base, parsed, scripts;</div><div class="line">    <span class="comment">// 检测是否有上下文对象，没有就自己创建一个document</span></div><div class="line">    <span class="keyword">if</span> ( !<span class="keyword">context</span> ) &#123;</div><div class="line"></div><div class="line">        <span class="comment">// Stop scripts or inline event handlers from being executed immediately</span></div><div class="line">        <span class="comment">// by using document.implementation</span></div><div class="line">        <span class="keyword">if</span> ( support<span class="variable">.createHTMLDocument</span> ) &#123;</div><div class="line">            <span class="keyword">context</span> = document<span class="variable">.implementation</span><span class="variable">.createHTMLDocument</span>( <span class="string">""</span> );</div><div class="line"></div><div class="line">            <span class="comment">// Set the base href for the created document</span></div><div class="line">            <span class="comment">// so any parsed elements with URLs</span></div><div class="line">            <span class="comment">// are based on the document's URL (gh-2965)</span></div><div class="line">            base = <span class="keyword">context</span><span class="variable">.createElement</span>( <span class="string">"base"</span> );</div><div class="line">            base<span class="variable">.href</span> = document<span class="variable">.location</span><span class="variable">.href</span>;</div><div class="line">            <span class="keyword">context</span><span class="variable">.head</span><span class="variable">.appendChild</span>( base );</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">context</span> = document;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    parsed = rsingleTag<span class="variable">.exec</span>( data );</div><div class="line">    scripts = !keepScripts &amp;&amp; [];</div><div class="line"></div><div class="line">    <span class="comment">// Single tag</span></div><div class="line">    <span class="comment">// 单个标签，直接返回创建出的dom</span></div><div class="line">    <span class="keyword">if</span> ( parsed ) &#123;</div><div class="line">        <span class="keyword">return</span> [ <span class="keyword">context</span><span class="variable">.createElement</span>( parsed[ <span class="number">1</span> ] ) ];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 非简单标签</span></div><div class="line">    parsed = buildFragment( [ data ], <span class="keyword">context</span>, scripts );</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ( scripts &amp;&amp; scripts<span class="variable">.length</span> ) &#123;</div><div class="line">        jQuery( scripts )<span class="variable">.remove</span>();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> jQuery<span class="variable">.merge</span>( [], parsed<span class="variable">.childNodes</span> );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>代码里对非单个标签的情况下，根据内容去创建文档碎片，然后返回这个碎片</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">buildFragment</span>(<span class="params"> elems, context, scripts, selection, ignored </span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> elem, tmp, tag, wrap, attached, j,</div><div class="line">        fragment = context.createDocumentFragment(),</div><div class="line">        nodes = [],</div><div class="line">        i = <span class="number">0</span>,</div><div class="line">        l = elems.length;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> ( ; i &lt; l; i++ ) &#123;</div><div class="line">        <span class="comment">// 处理elems[i]</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Remove wrapper from fragment</span></div><div class="line">    fragment.textContent = <span class="string">""</span>;</div><div class="line"></div><div class="line">    i = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span> ( ( elem = nodes[ i++ ] ) ) &#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> fragment;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对碎片处理，分类处理。是dom节点，直接放到nodes里，是文本就创建文本节点，其他的就创建div，将字符串作为innerHTML插入，获取所有的节点，放在nodes里<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ( <span class="built_in">elem</span> || <span class="built_in">elem</span> === <span class="number">0</span> ) &#123;</div><div class="line"></div><div class="line">    // Add nodes directly</div><div class="line">    <span class="keyword">if</span> ( toType( <span class="built_in">elem</span> ) === <span class="string">"object"</span> ) &#123;</div><div class="line"></div><div class="line">        // Support: Android &lt;=<span class="number">4.0</span> only, PhantomJS <span class="number">1</span> only</div><div class="line">        // <span class="built_in">push</span>.<span class="built_in">apply</span>(<span class="symbol">_</span>, arraylike) throws on ancient WebKit</div><div class="line">        jQuery.merge( nodes, <span class="built_in">elem</span>.nodeType ? [ <span class="built_in">elem</span> ] : <span class="built_in">elem</span> );</div><div class="line"></div><div class="line">    // 文本节点</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( !rhtml.test( <span class="built_in">elem</span> ) ) &#123;</div><div class="line">        nodes.<span class="built_in">push</span>( <span class="built_in">context</span>.createTextNode( <span class="built_in">elem</span> ) );</div><div class="line"></div><div class="line">    // dom节点</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        tmp = tmp || fragment.appendChild( <span class="built_in">context</span>.createElement( <span class="string">"div"</span> ) );</div><div class="line"></div><div class="line">        // 获取最外层的标签</div><div class="line">        tag = ( rtagName.exec( <span class="built_in">elem</span> ) || [ <span class="string">""</span>, <span class="string">""</span> ] )[ <span class="number">1</span> ].toLowerCase();</div><div class="line">        // 为标签补充外层，如option、thead等</div><div class="line">        wrap = wrapMap[ tag ] || wrapMap._default;</div><div class="line">        tmp.innerHTML = wrap[ <span class="number">1</span> ] + jQuery.htmlPrefilter( <span class="built_in">elem</span> ) + wrap[ <span class="number">2</span> ];</div><div class="line"></div><div class="line">        // 找到包裹内容的上一层，如div, tbody</div><div class="line">        j = wrap[ <span class="number">0</span> ];</div><div class="line">        <span class="keyword">while</span> ( j-- ) &#123;</div><div class="line">            tmp = tmp.lastChild;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // Support: Android &lt;=<span class="number">4.0</span> only, PhantomJS <span class="number">1</span> only</div><div class="line">        // <span class="built_in">push</span>.<span class="built_in">apply</span>(<span class="symbol">_</span>, arraylike) throws on ancient WebKit</div><div class="line">        // </div><div class="line">        jQuery.merge( nodes, tmp.childNodes );</div><div class="line"></div><div class="line">        // Remember the top-level container</div><div class="line">        tmp = fragment.firstChild;</div><div class="line"></div><div class="line">        // Ensure the created nodes are orphaned (#<span class="number">12392</span>)</div><div class="line">        tmp.textContent = <span class="string">""</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>下面还有一段处理脚本的代码，还没看懂。。。<br>然后把所有的节点都在到碎片里，并对脚本进行处理，这一段没看懂。。。😅<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">fragment.textContent = <span class="string">""</span>;</div><div class="line"></div><div class="line">i = <span class="number">0</span>;</div><div class="line"><span class="keyword">while</span> ( ( <span class="built_in">elem</span> = nodes[ i++ ] ) ) &#123;</div><div class="line"></div><div class="line">    // Skip elements already <span class="keyword">in</span> the <span class="built_in">context</span> collection (trac-<span class="number">4087</span>)</div><div class="line">    <span class="keyword">if</span> ( selection &amp;&amp; jQuery.inArray( <span class="built_in">elem</span>, selection ) &gt; -<span class="number">1</span> ) &#123;</div><div class="line">        <span class="keyword">if</span> ( ignored ) &#123;</div><div class="line">            ignored.<span class="built_in">push</span>( <span class="built_in">elem</span> );</div><div class="line">        &#125;</div><div class="line">        continue;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    attached = isAttached( <span class="built_in">elem</span> );</div><div class="line"></div><div class="line">    // Append to fragment</div><div class="line">    tmp = getAll( fragment.appendChild( <span class="built_in">elem</span> ), <span class="string">"script"</span> );</div><div class="line"></div><div class="line">    // Preserve script evaluation history</div><div class="line">    <span class="keyword">if</span> ( attached ) &#123;</div><div class="line">        setGlobalEval( tmp );</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // Capture executables</div><div class="line">    <span class="keyword">if</span> ( scripts ) &#123;</div><div class="line">        j = <span class="number">0</span>;</div><div class="line">        <span class="keyword">while</span> ( ( <span class="built_in">elem</span> = tmp[ j++ ] ) ) &#123;</div><div class="line">            <span class="keyword">if</span> ( rscriptType.test( <span class="built_in">elem</span>.type || <span class="string">""</span> ) ) &#123;</div><div class="line">                scripts.<span class="built_in">push</span>( <span class="built_in">elem</span> );</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>到这似乎越来越接近sizzle了，但是看到这我都觉得有点费力了，之后可能不按顺序走了，挑点简单的看起。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/源码学习/" rel="tag"># 源码学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/jQuery学习一.html" rel="next" title="jQuery学习一">
+                <i class="fa fa-chevron-left"></i> jQuery学习一
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/自己实现一个promise.html" rel="prev" title="自己实现一个promise">
+                自己实现一个promise <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">youen</p>
+              <p class="site-description motion-element" itemprop="description">记一些笔记，发一些牢骚</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#用法"><span class="nav-number">1.</span> <span class="nav-text">用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对DOM的操作"><span class="nav-number">2.1.</span> <span class="nav-text">对DOM的操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对callback的操作"><span class="nav-number">2.2.</span> <span class="nav-text">对callback的操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对HTML-string的处理"><span class="nav-number">2.3.</span> <span class="nav-text">对HTML string的处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parseHTML"><span class="nav-number">3.</span> <span class="nav-text">parseHTML</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">youen</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> 强力驱动 v3.2.2</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: decodeURI(window.location.pathname),
+            owner: 'youen123',
+            repo: 'youen123.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '9ccdf47f66e21faf737e75905b30af69292e60a9',
+            
+                client_id: '245eed7b28a869f53638'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("0emUCFOkexAmJ9p1mnoUXXa7-gzGzoHsz", "PX1R4VBPkdpcAWENmyUDJG1P");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! See more at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see here how to solve it: https://github.com/theme-next/hexo-leancloud-counter-security. \n But you also can use LeanCloud without security, by set \'security\' option to \'false\'.');
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
