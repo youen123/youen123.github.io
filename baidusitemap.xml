@@ -4,11 +4,30 @@
 
     
   <url>
-    <loc>http://youlujie.top/React-15-%E7%9A%84-setState.html</loc>
-    <lastmod>2018-09-13T03:06:46.589Z</lastmod>
+    <loc>http://youlujie.top/React-15-%E7%9A%84-setState%EF%BC%88%E4%B8%8B%EF%BC%89.html</loc>
+    <lastmod>2018-09-13T15:13:33.685Z</lastmod>
     <data>
         <display>
-        <title>React 15 的 setState</title>
+        <title>React 15 的 setState（下）</title>
+        <pubTime>2018-09-13T14:56:07.000Z</pubTime>
+        
+        <tag>React</tag>
+         
+        <tag>源码学习</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://youlujie.top/React-15-%E7%9A%84-setState%EF%BC%88%E4%B8%8A%EF%BC%89.html</loc>
+    <lastmod>2018-09-13T15:01:51.380Z</lastmod>
+    <data>
+        <display>
+        <title>React 15 的 setState（上）</title>
         <pubTime>2018-09-13T02:16:08.000Z</pubTime>
         
         <tag>React</tag>
