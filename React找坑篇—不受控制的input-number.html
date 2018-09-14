@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta name="google-site-verification" content="OziN3m4EViQsY_rvbdqzUKYznAoGaD0XQ-LKsHawyHs" />
+  <meta name="baidu-site-verification" content="YrsqTuBmrV" />
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="true" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="input-number失效，输入值和state不符，找找原因 -&amp;gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React找坑篇—不受控制的input-number">
+<meta property="og:url" content="http://youlujie.top/React找坑篇—不受控制的input-number.html">
+<meta property="og:site_name" content="youen的藏宝箱">
+<meta property="og:description" content="input-number失效，输入值和state不符，找找原因 -&amp;gt;">
+<meta property="og:image" content="http://youlujie.top/images/update_component_stack.png">
+<meta property="og:updated_time" content="2018-09-14T12:45:56.130Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React找坑篇—不受控制的input-number">
+<meta name="twitter:description" content="input-number失效，输入值和state不符，找找原因 -&amp;gt;">
+<meta name="twitter:image" content="http://youlujie.top/images/update_component_stack.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://youlujie.top/React找坑篇—不受控制的input-number.html"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>React找坑篇—不受控制的input-number</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f8755d26a51fba4dbd2e77c0104de792";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">youen的藏宝箱</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">前端笔记</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://youlujie.top/React找坑篇—不受控制的input-number.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="youen">
+      <meta itemprop="description" content="记一些笔记，发一些牢骚">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="youen的藏宝箱">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">React找坑篇—不受控制的input-number
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-14 17:19:28 / 修改时间：20:45:56" itemprop="dateCreated datePublished" datetime="2018-09-14T17:19:28+08:00">2018-09-14</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/React找坑篇—不受控制的input-number.html#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count gitment-comments-count" data-xid="/React找坑篇—不受控制的input-number.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/React找坑篇—不受控制的input-number.html" class="leancloud_visitors" data-flag-title="React找坑篇—不受控制的input-number">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+    
+        <div class="post-description">input-number失效，输入值和state不符，找找原因 -></div>
+    
+      
+      
+
+      
+        <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>一次写业务需求的时候，需要自己写一个input-number组件。这个input-number允许用户输入，将输入转为数字后重新展示。</p>
+<p>于是马上写了一版：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 组件</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InputNumber</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">    <span class="keyword">this</span>.state = &#123;</div><div class="line">      val: <span class="number">0</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">this</span>.changeVal = <span class="keyword">this</span>.changeVal.bind(<span class="keyword">this</span>)</div><div class="line">  &#125;</div><div class="line">  changeVal(e) &#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123;</div><div class="line">      val: <span class="built_in">parseInt</span>(e.target.value)</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;input type="number" value=&#123;this.state.val&#125;</div><div class="line">        onChange=&#123;this.changeVal&#125;</div><div class="line">      /&gt;</div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>但发现在给<code>input-number</code>输入”01”后，显示居然没有变成”1”</p>
+<p>为什么会出现这种情况？你能猜到原因吗？</p>
+<h3 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h3><p>经过对setState的学习，我们知道更新时，会调用<code>_updateRenderedComponent</code>方法，我们在这打上断点，看下后面都发生了什么。</p>
+<p>进过一番折腾，终于找到input更新dom的地方了</p>
+<p>调用栈<br><img src="/images/update_component_stack.png" alt="调用栈"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Updates a DOM component after it has already been allocated and</div><div class="line"> * attached to the DOM. Reconciles the root DOM node, then recurses.</div><div class="line"> *</div><div class="line"> * @param &#123;ReactReconcileTransaction&#125; transaction</div><div class="line"> * @param &#123;ReactElement&#125; prevElement</div><div class="line"> * @param &#123;ReactElement&#125; nextElement</div><div class="line"> * @internal</div><div class="line"> * @overridable</div><div class="line"> */</div><div class="line">updateComponent: <span class="function"><span class="keyword">function</span> (<span class="params">transaction, prevElement, nextElement, context</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> lastProps = prevElement.props;</div><div class="line">  <span class="keyword">var</span> nextProps = <span class="keyword">this</span>._currentElement.props;</div><div class="line"></div><div class="line">  <span class="keyword">switch</span> (<span class="keyword">this</span>._tag) &#123;</div><div class="line">    <span class="keyword">case</span> <span class="string">'input'</span>:</div><div class="line">      lastProps = ReactDOMInput.getHostProps(<span class="keyword">this</span>, lastProps);</div><div class="line">      nextProps = ReactDOMInput.getHostProps(<span class="keyword">this</span>, nextProps);</div><div class="line">      <span class="keyword">break</span>;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  assertValidProps(<span class="keyword">this</span>, nextProps);</div><div class="line">  <span class="keyword">this</span>._updateDOMProperties(lastProps, nextProps, transaction);</div><div class="line">  <span class="keyword">this</span>._updateDOMChildren(lastProps, nextProps, transaction, context);</div><div class="line"></div><div class="line">  <span class="keyword">switch</span> (<span class="keyword">this</span>._tag) &#123;</div><div class="line">    <span class="keyword">case</span> <span class="string">'input'</span>:</div><div class="line">      <span class="comment">// Update the wrapper around inputs *after* updating props. This has to</span></div><div class="line">      <span class="comment">// happen after `_updateDOMProperties`. Otherwise HTML5 input validations</span></div><div class="line">      <span class="comment">// raise warnings and prevent the new value from being assigned.</span></div><div class="line">      ReactDOMInput.updateWrapper(<span class="keyword">this</span>);</div><div class="line"></div><div class="line">      <span class="comment">// We also check that we haven't missed a value update, such as a</span></div><div class="line">      <span class="comment">// Radio group shifting the checked value to another named radio input.</span></div><div class="line">      inputValueTracking.updateValueIfChanged(<span class="keyword">this</span>);</div><div class="line">      <span class="keyword">break</span>;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<p>获取到新旧两个props后，会更新dom属性，我们的值不同，很可能是这里出的问题</p>
+<p>我们进入<code>_updateDOMProperties</code>看看它是如何更新属性的<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"> _updateDOMProperties: <span class="function"><span class="keyword">function</span> (<span class="params">lastProps, nextProps, transaction</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> propKey;</div><div class="line">  <span class="keyword">var</span> styleName;</div><div class="line">  <span class="keyword">var</span> styleUpdates;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">for</span> (propKey <span class="keyword">in</span> nextProps) &#123;</div><div class="line">    <span class="keyword">var</span> nextProp = nextProps[propKey];</div><div class="line">    <span class="keyword">var</span> lastProp = propKey === STYLE ? <span class="keyword">this</span>._previousStyleCopy : lastProps != <span class="literal">null</span> ? lastProps[propKey] : <span class="literal">undefined</span>;</div><div class="line">    <span class="keyword">if</span> (!nextProps.hasOwnProperty(propKey) || nextProp === lastProp || nextProp == <span class="literal">null</span> &amp;&amp; lastProp == <span class="literal">null</span>) &#123;</div><div class="line">      <span class="keyword">continue</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    <span class="keyword">if</span> (DOMProperty.properties[propKey] || DOMProperty.isCustomAttribute(propKey)) &#123;</div><div class="line">      <span class="keyword">var</span> node = getNode(<span class="keyword">this</span>);</div><div class="line">      <span class="comment">// If we're updating to null or undefined, we should remove the property</span></div><div class="line">      <span class="comment">// from the DOM node instead of inadvertently setting to a string. This</span></div><div class="line">      <span class="comment">// brings us in line with the same behavior we have on initial render.</span></div><div class="line">      <span class="keyword">if</span> (nextProp != <span class="literal">null</span>) &#123;</div><div class="line">        DOMPropertyOperations.setValueForProperty(node, propKey, nextProp);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        DOMPropertyOperations.deleteValueForProperty(node, propKey);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (styleUpdates) &#123;</div><div class="line">    CSSPropertyOperations.setValueForStyles(getNode(<span class="keyword">this</span>), styleUpdates, <span class="keyword">this</span>);</div><div class="line">  &#125;</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<p>在调试时，我们仅需关注value，发现这里对value的主要处理为<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">var</span> node = getNode(<span class="keyword">this</span>);</div><div class="line"><span class="comment">// If we're updating to null or undefined, we should remove the property</span></div><div class="line"><span class="comment">// from the DOM node instead of inadvertently setting to a string. This</span></div><div class="line"><span class="comment">// brings us in line with the same behavior we have on initial render.</span></div><div class="line"><span class="keyword">if</span> (nextProp != <span class="literal">null</span>) &#123;</div><div class="line">  DOMPropertyOperations.setValueForProperty(node, propKey, nextProp);</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">  DOMPropertyOperations.deleteValueForProperty(node, propKey);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>继续追踪，函数执行到<code>DOMPropertyOperations.setValueForProperty</code></p>
+<p>是不是有点紧张，越来越接近答案了</p>
+<p>辗转又进入<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">DOMMutationMethods: &#123;</div><div class="line">  value: <span class="function"><span class="keyword">function</span> (<span class="params">node, value</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (value == <span class="literal">null</span>) &#123;</div><div class="line">      <span class="keyword">return</span> node.removeAttribute(<span class="string">'value'</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Number inputs get special treatment due to some edge cases in</span></div><div class="line">    <span class="comment">// Chrome. Let everything else assign the value attribute as normal.</span></div><div class="line">    <span class="comment">// https://github.com/facebook/react/issues/7253#issuecomment-236074326</span></div><div class="line">    <span class="keyword">if</span> (node.type !== <span class="string">'number'</span> || node.hasAttribute(<span class="string">'value'</span>) === <span class="literal">false</span>) &#123;</div><div class="line">      node.setAttribute(<span class="string">'value'</span>, <span class="string">''</span> + value);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (node.validity &amp;&amp; !node.validity.badInput &amp;&amp; node.ownerDocument.activeElement !== node) &#123;</div><div class="line">      <span class="comment">// Don't assign an attribute if validation reports bad</span></div><div class="line">      <span class="comment">// input. Chrome will clear the value. Additionally, don't</span></div><div class="line">      <span class="comment">// operate on inputs that have focus, otherwise Chrome might</span></div><div class="line">      <span class="comment">// strip off trailing decimal places and cause the user's</span></div><div class="line">      <span class="comment">// cursor position to jump to the beginning of the input.</span></div><div class="line">      <span class="comment">//</span></div><div class="line">      <span class="comment">// In ReactDOMInput, we have an onBlur event that will trigger</span></div><div class="line">      <span class="comment">// this function again when focus is lost.</span></div><div class="line">      node.setAttribute(<span class="string">'value'</span>, <span class="string">''</span> + value);</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>走到这，这里的<code>node.ownerDocument.activeElement</code> 等于 <code>node</code>，并没有去重置node的value值，而原因在注释中说明</p>
+<blockquote>
+<p>don’t operate on inputs that have focus, otherwise Chrome might strip off trailing decimal places and cause the user’s cursor position to jump to the beginning of the input.</p>
+</blockquote>
+<p>“不要对具有焦点的输入进行操作，否则Chrome可能会脱离尾随小数位并导致用户的光标位置跳转到输入的开头。”</p>
+<p>这里没有去更新input的值，那有别的地方处理吗？</p>
+<p>这段注释下面还有一句</p>
+<blockquote>
+<p>In ReactDOMInput, we have an onBlur event that will trigger this function again when focus is lost.</p>
+</blockquote>
+<p>说的是失去焦点时，会重新触发这个操作。</p>
+<p>回到<code>updateComponent</code>方法，关于input，它还有一部分操作<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="string">'input'</span>:</div><div class="line">  <span class="comment">// Update the wrapper around inputs *after* updating props. This has to</span></div><div class="line">  <span class="comment">// happen after `_updateDOMProperties`. Otherwise HTML5 input validations</span></div><div class="line">  <span class="comment">// raise warnings and prevent the new value from being assigned.</span></div><div class="line">  ReactDOMInput.updateWrapper(<span class="keyword">this</span>);</div><div class="line"></div><div class="line">  <span class="comment">// We also check that we haven't missed a value update, such as a</span></div><div class="line">  <span class="comment">// Radio group shifting the checked value to another named radio input.</span></div><div class="line">  inputValueTracking.updateValueIfChanged(<span class="keyword">this</span>);</div><div class="line">  <span class="keyword">break</span>;</div></pre></td></tr></table></figure></p>
+<p>看看wrapper里有没有对此input更新<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> value = LinkedValueUtils.getValue(props);</div><div class="line"><span class="comment">// ...</span></div><div class="line"><span class="keyword">var</span> valueAsNumber = <span class="built_in">parseFloat</span>(node.value, <span class="number">10</span>) || <span class="number">0</span>;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (</div><div class="line"><span class="comment">// eslint-disable-next-line</span></div><div class="line">value != valueAsNumber ||</div><div class="line"><span class="comment">// eslint-disable-next-line</span></div><div class="line">value == valueAsNumber &amp;&amp; node.value != value) &#123;</div><div class="line">    <span class="comment">// Cast `value` to a string to ensure the value is set correctly. While</span></div><div class="line">    <span class="comment">// browsers typically do this as necessary, jsdom doesn't.</span></div><div class="line">    node.value = <span class="string">''</span> + value;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意到这里node.value 为 “01” 而 value为 1</p>
+<p>而 “01” == 1，因此这里也没有更新，晕！</p>
+<p>终于找着了罪魁祸首，这是不是React的bug呢？准备提一个issue去。</p>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><h4 id="方案一：手动更新"><a href="#方案一：手动更新" class="headerlink" title="方案一：手动更新"></a>方案一：手动更新</h4><p>在componentDidUpdate里，我们去操作真实dom的value值</p>
+<h4 id="方案二：避免字符串与数字比较"><a href="#方案二：避免字符串与数字比较" class="headerlink" title="方案二：避免字符串与数字比较"></a>方案二：避免字符串与数字比较</h4><p>可以将相关的state 改为string 类型</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/React/" rel="tag"># React</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/React-15-的-setState（下）.html" rel="next" title="React 15 的 setState（下）">
+                <i class="fa fa-chevron-left"></i> React 15 的 setState（下）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">youen</p>
+              <p class="site-description motion-element" itemprop="description">记一些笔记，发一些牢骚</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调试"><span class="nav-number">2.</span> <span class="nav-text">调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决"><span class="nav-number">3.</span> <span class="nav-text">解决</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方案一：手动更新"><span class="nav-number">3.1.</span> <span class="nav-text">方案一：手动更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方案二：避免字符串与数字比较"><span class="nav-number">3.2.</span> <span class="nav-text">方案二：避免字符串与数字比较</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">youen</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> 强力驱动 v3.2.2</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: decodeURI(window.location.pathname),
+            owner: 'youen123',
+            repo: 'youen123.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '9ccdf47f66e21faf737e75905b30af69292e60a9',
+            
+                client_id: '245eed7b28a869f53638'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("0emUCFOkexAmJ9p1mnoUXXa7-gzGzoHsz", "PX1R4VBPkdpcAWENmyUDJG1P");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! See more at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see here how to solve it: https://github.com/theme-next/hexo-leancloud-counter-security. \n But you also can use LeanCloud without security, by set \'security\' option to \'false\'.');
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
